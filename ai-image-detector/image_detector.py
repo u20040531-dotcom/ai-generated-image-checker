@@ -3,7 +3,7 @@ import sys
 
 
 HF_TOKEN = "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"
-MODEL = "Ateeqq/ai-vs-human-image-detector"
+MODEL = "ai_vs_real_image_detection"
 API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
