@@ -1,8 +1,10 @@
 import streamlit as st
 import requests
-from PIL import Image
+import os
 
-HF_TOKEN = "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"
+from PIL import Image
+HF_TOKEN = os.getenv("HF_TOKEN")
+export HF_TOKEN="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"
 MODEL = "Ateeqq/ai-vs-human-image-detector"  # 完整模型路徑
 API_URL = "https://router.huggingface.co/hf-inference/models/" + MODEL
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
