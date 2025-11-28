@@ -3,8 +3,9 @@ import requests
 from PIL import Image
 
 HF_TOKEN = "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"
-MODEL = "ai-vs-human-image-detector"   # ← 改成完整模型路徑
+MODEL = "Ateeqq/ai-vs-human-image-detector"   # ← 改成完整模型路徑
 API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
+
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
 st.title("AI vs Human Image Detector — Streamlit Demo")
