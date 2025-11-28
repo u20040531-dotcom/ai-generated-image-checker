@@ -20,18 +20,18 @@ if uploaded:
     st.image(img, caption="Uploaded Image", use_column_width=True)
 
 
-if st.button("Run Detection"):
-    img_bytes = uploaded.read()
+    if st.button("Run Detection"):
+        img_bytes = uploaded.read()
 
 
-with st.spinner("Calling Hugging Face model..."):
-    resp = requests.post(API_URL, headers=HEADERS, data=img_bytes, timeout=60)
+        with st.spinner("Calling Hugging Face model..."):
+            resp = requests.post(API_URL, headers=HEADERS, data=img_bytes, timeout=60)
 
 
-if resp.status_code == 200:
-    res = resp.json()
-    st.subheader("Model Raw Output:")
-    st.write(res)
+        if resp.status_code == 200:
+            res = resp.json()
+            st.subheader("Model Raw Output:")
+            st.write(res)
 
 
 st.subheader("Parsed Output:")
