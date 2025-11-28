@@ -1,6 +1,13 @@
 import streamlit as st
 import requests
 import os
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if HF_TOKEN is None:
+    raise ValueError("請先設定 HF_TOKEN 環境變數")
+
+print("Token 讀取成功！")  # 測試用
+
 
 from PIL import Image
 
