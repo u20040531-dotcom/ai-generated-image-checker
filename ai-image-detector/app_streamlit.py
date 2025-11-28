@@ -34,12 +34,12 @@ if uploaded:
             st.write(res)
 
 
-st.subheader("Parsed Output:")
+            st.subheader("Parsed Output:")
 # 假設模型回傳格式為 list
-    if isinstance(res, list):
-        for item in res:
-            st.write(f"{item['label']}: {item.get('score', item.get('confidence', 0)):.3f}")
-    else:
-        st.write(res)
-else:
-    st.error(f"API Error: {resp.status_code} {resp.text}")
+            if isinstance(res, list):
+                for item in res:
+                    st.write(f"{item['label']}: {item.get('score', item.get('confidence', 0)):.3f}")
+            else:
+                st.write(res)
+        else:
+            st.error(f"API Error: {resp.status_code} {resp.text}")
