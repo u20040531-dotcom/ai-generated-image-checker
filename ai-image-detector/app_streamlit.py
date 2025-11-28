@@ -4,7 +4,7 @@ import os
 
 from PIL import Image
 
-HF_TOKEN="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"
+HF_TOKEN="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"
 MODEL = "Ateeqq/ai-vs-human-image-detector"  # 完整模型路徑
 API_URL = "https://router.huggingface.co/hf-inference/models/" + MODEL
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
