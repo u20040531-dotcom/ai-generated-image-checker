@@ -3,7 +3,7 @@ import requests
 from PIL import Image
 
 
-HF_TOKEN = "hf_xxx_replace_with_your_token"
+HF_TOKEN = "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"
 MODEL = "Ateeqq/ai-vs-human-image-detector"
 API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
