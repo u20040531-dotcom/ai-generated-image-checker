@@ -1,7 +1,7 @@
 import requests
 import sys
 
-HF_TOKEN = "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"
+HF_TOKEN = "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"
 MODEL = "Ateeqq/ai-vs-human-image-detector"
 API_URL = "https://router.huggingface.co/hf-inference/models/" + MODEL
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
