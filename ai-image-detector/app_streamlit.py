@@ -3,9 +3,8 @@ import requests
 from PIL import Image
 
 HF_TOKEN = "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"
-MODEL = "Ateeqq/ai-vs-human-image-detector"   # ← 改成完整模型路徑
+MODEL = "Ateeqq/ai-vs-human-image-detector"  # 完整模型路徑
 API_URL = f"https://api-inference.huggingface.co/models/{MODEL}"
-
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
 st.title("AI vs Human Image Detector — Streamlit Demo")
@@ -17,6 +16,7 @@ if uploaded:
     st.image(img, caption="Uploaded Image", use_column_width=True)
 
     if st.button("Run Detection"):
+        uploaded.seek(0)
         img_bytes = uploaded.read()
 
         with st.spinner("Calling Hugging Face model..."):
