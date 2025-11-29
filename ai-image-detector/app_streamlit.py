@@ -1,19 +1,15 @@
 import streamlit as st
 import requests
 import os
-HF_TOKEN = os.getenv("HF_TOKEN")
+from PIL import Image
+
+HF_TOKEN = os.getenv("HF_TOKEN")  # 從環境變數讀
 
 if HF_TOKEN is None:
     raise ValueError("請先設定 HF_TOKEN 環境變數")
 
-print("Token 讀取成功！")  # 測試用
-
-
-from PIL import Image
-
-HF_TOKEN="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"
-MODEL = "Ateeqq/ai-vs-human-image-detector"  # 完整模型路徑
-API_URL = "https://router.huggingface.co/hf-inference/models/" + MODEL
+MODEL = "Ateeqq/ai-vs-human-image-detector"
+API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
 st.title("AI vs Human Image Detector — Streamlit Demo")
@@ -39,9 +35,7 @@ if uploaded:
             st.subheader("Parsed Output:")
             if isinstance(res, list):
                 for item in res:
-                    label = item.get("label", "N/A")
-                    score = item.get("score", 0)
-                    st.write(f"{label}: {score:.3f}")
+                    st.write(f"{item.get('label', 'N/A')}: {item.get('score', 0):.3f}")
             else:
                 st.write(res)
         else:
