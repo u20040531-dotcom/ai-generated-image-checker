@@ -12,7 +12,7 @@ MODEL = "Ateeqq/ai-vs-human-image-detector"
 API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
 HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
-st.title("AI vs Human Image Detector — Streamlit Demo")
+st.title("AI vs Human 圖片識別")
 
 uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
