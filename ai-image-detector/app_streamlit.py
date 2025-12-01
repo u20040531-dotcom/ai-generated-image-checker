@@ -20,7 +20,7 @@ if uploaded:
     img = Image.open(uploaded).convert("RGB")
     st.image(img, caption="Uploaded Image", use_column_width=True)
 
-    if st.button("Run Detection"):
+    if st.button("跑動測試"):
         uploaded.seek(0)
         img_bytes = uploaded.read()
 
@@ -29,10 +29,10 @@ if uploaded:
 
         if resp.status_code == 200:
             res = resp.json()
-            st.subheader("Model Raw Output:")
+            st.subheader("建模原始輸出:")
             st.write(res)
 
-            st.subheader("Parsed Output:")
+            st.subheader("建模原始輸出:")
             if isinstance(res, list):
                 for item in res:
                     st.write(f"{item.get('label', 'N/A')}: {item.get('score', 0):.3f}")
