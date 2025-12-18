@@ -1,30 +1,40 @@
-import requests
-import sys
-import os
+import torch
+import torch.nn as nn
+from torchvision import models, transforms
+from PIL import Image
 
+class ImageDetector:
+    def __init__(self, model_path):
+        self.model = models.mobilenet_v2(pretrained=False)
+        self.model.classifier[1] = nn.Linear(1280, 2)
 
-HF_TOKEN = os.getenv("HF_TOKEN")  # 從環境變數讀取
+        self.model.load_state_dict(
+            torch.load(model_path, map_location="cpu")
+        )
+        self.model.eval()
 
-if HF_TOKEN is None:
-    raise ValueError("請先設定環境變數 HF_TOKEN")
+        self.transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225]
+            )
+        ])
 
-MODEL = "Ateeqq/ai-vs-human-image-detector"
-API_URL = "https://router.huggingface.co/hf-inference/models/" + MODEL
-HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
+        self.classes = ["AI Generated", "Real Image"]
 
+    def predict(self, image: Image.Image):
+        img = self.transform(image).unsqueeze(0)
 
-def predict_image(path):
-    with open(path, "rb") as f:
-        img_bytes = f.read()
-        resp = requests.post(API_URL, headers=HEADERS, data=img_bytes, timeout=60)
-    return resp.json()
+        with torch.no_grad():
+            out = self.model(img)
+            prob = torch.softmax(out, dim=1)[0]
 
+        idx = prob.argmax().item()
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python hf_image_detector.py image.jpg")
-        sys.exit(1)
-
-    result = predict_image(sys.argv[1])
-    print("Model Output:")
-    print(result)
+        return {
+            "label": self.classes[idx],
+            "confidence": prob[idx].item(),
+            "raw_prob": prob.tolist()
+        }
