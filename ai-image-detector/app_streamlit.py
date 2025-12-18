@@ -1,35 +1,42 @@
 import streamlit as st
-from PIL import Image
-from image_detector import ImageDetector
+import requests
 import os
+from PIL import Image
 
-st.set_page_config(page_title="AI vs Human 圖片識別", layout="centered")
-st.title("AI vs Human 圖片識別系統")
+HF_TOKEN = os.getenv("HF_TOKEN")  # 從環境變數讀
 
-# ===== 載入模型 =====
-MODEL_PATH = "ai_image_detector.pth"
+if HF_TOKEN is None:
+    raise ValueError("請先設定 HF_TOKEN 環境變數")
 
-if not os.path.exists(MODEL_PATH):
-    st.error("找不到模型檔 ai_image_detector.pth")
-    st.stop()
+MODEL = "Ateeqq/ai-vs-human-image-detector"
+API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL}"
+HEADERS = {"Authorization": f"Bearer {HF_TOKEN}", "Content-Type": "application/octet-stream"}
 
-detector = ImageDetector(MODEL_PATH)
+st.title("AI vs Human 圖片識別")
 
-# ===== 上傳圖片 =====
-uploaded = st.file_uploader(
-    "請上傳圖片（jpg / png）",
-    type=["jpg", "jpeg", "png"]
-)
+uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
-if uploaded is not None:
+if uploaded:
     img = Image.open(uploaded).convert("RGB")
     st.image(img, caption="Uploaded Image", use_column_width=True)
 
-    if st.button("開始判斷"):
-        with st.spinner("模型推論中..."):
-            result = detector.predict(img)
+    if st.button("跑動測試"):
+        uploaded.seek(0)
+        img_bytes = uploaded.read()
 
-        st.subheader("模型判斷結果")
-        st.write(f"📌 **Prediction**：{result['label']}")
-        st.write(f"📊 **Confidence**：{result['confidence']:.2%}")
-        st.progress(result["confidence"])
+        with st.spinner("Calling Hugging Face model..."):
+            resp = requests.post(API_URL, headers=HEADERS, data=img_bytes, timeout=60)
+
+        if resp.status_code == 200:
+            res = resp.json()
+            st.subheader("建模原始輸出:")
+            st.write(res)
+
+            st.subheader("建模原始輸出:")
+            if isinstance(res, list):
+                for item in res:
+                    st.write(f"{item.get('label', 'N/A')}: {item.get('score', 0):.3f}")
+            else:
+                st.write(res)
+        else:
+            st.error(f"API Error: {resp.status_code} {resp.text}")
